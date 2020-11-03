@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 
 	"github.com/jinzhu/gorm"
 	"github.com/wangzitian0/golang-gin-starter-kit/articles"
@@ -27,6 +28,7 @@ func main() {
 	defer db.Close()
 
 	r := gin.Default()
+	r.Use(cors.Default())
 
 	v1 := r.Group("/api")
 	users.UsersRegister(v1.Group("/users"))

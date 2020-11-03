@@ -4,13 +4,14 @@ import (
 	"errors"
 	"github.com/wangzitian0/golang-gin-starter-kit/common"
 	"github.com/wangzitian0/golang-gin-starter-kit/users"
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 )
 
 func ArticlesRegister(router *gin.RouterGroup) {
 	router.POST("/", ArticleCreate)
+	router.POST("", ArticleCreate)
 	router.PUT("/:slug", ArticleUpdate)
 	router.DELETE("/:slug", ArticleDelete)
 	router.POST("/:slug/favorite", ArticleFavorite)
@@ -21,12 +22,14 @@ func ArticlesRegister(router *gin.RouterGroup) {
 
 func ArticlesAnonymousRegister(router *gin.RouterGroup) {
 	router.GET("/", ArticleList)
+	router.GET("", ArticleList)
 	router.GET("/:slug", ArticleRetrieve)
 	router.GET("/:slug/comments", ArticleCommentList)
 }
 
 func TagsAnonymousRegister(router *gin.RouterGroup) {
 	router.GET("/", TagList)
+	router.GET("", TagList)
 }
 
 func ArticleCreate(c *gin.Context) {

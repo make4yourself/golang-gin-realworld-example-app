@@ -3,18 +3,21 @@ package users
 import (
 	"errors"
 	"github.com/wangzitian0/golang-gin-starter-kit/common"
-	"gopkg.in/gin-gonic/gin.v1"
+	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
 func UsersRegister(router *gin.RouterGroup) {
 	router.POST("/", UsersRegistration)
+	router.POST("", UsersRegistration)
 	router.POST("/login", UsersLogin)
 }
 
 func UserRegister(router *gin.RouterGroup) {
 	router.GET("/", UserRetrieve)
+	router.GET("", UserRetrieve)
 	router.PUT("/", UserUpdate)
+	router.PUT("", UserUpdate)
 }
 
 func ProfileRegister(router *gin.RouterGroup) {
