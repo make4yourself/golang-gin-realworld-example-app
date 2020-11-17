@@ -11,9 +11,10 @@ type Database struct {
 	*gorm.DB
 }
 
+// 全局 DB 变量，是程序与数据库的连接管理状态
 var DB *gorm.DB
 
-// Opening a database and save the reference to `Database` struct.
+// 建立与数据库之间的连接，并将连接状态用一个全局变量 DB 保存
 func Init() *gorm.DB {
 	db, err := gorm.Open("sqlite3", "./common/DBdata/gorm.db")
 	if err != nil {
@@ -25,7 +26,7 @@ func Init() *gorm.DB {
 	return DB
 }
 
-// This function will create a temporarily database for running testing cases
+// 这个函数会创建一个临时的数据库用于测试样例
 func TestDBInit() *gorm.DB {
 	test_db, err := gorm.Open("sqlite3", "./../gorm_test.db")
 	if err != nil {
@@ -37,14 +38,14 @@ func TestDBInit() *gorm.DB {
 	return DB
 }
 
-// Delete the database after running testing cases.
+// 删除为测试样例创建的临时数据库
 func TestDBFree(test_db *gorm.DB) error {
 	test_db.Close()
 	err := os.Remove("./../gorm_test.db")
 	return err
 }
 
-// Using this function to get a connection, you can create your connection pool here.
+// 使用这个函数从全局变量中或取已经获得的数据库连接
 func GetDB() *gorm.DB {
 	return DB
 }

@@ -39,10 +39,12 @@ type FollowModel struct {
 	FollowedByID uint
 }
 
-// Migrate the schema of database if needed
+// 如果数据库中没有对应的数据表就迁移它们
 func AutoMigrate() {
+	// 获取全局中 DB 的连接
 	db := common.GetDB()
 
+	// 迁移用户表和关注用户的中间表
 	db.AutoMigrate(&UserModel{})
 	db.AutoMigrate(&FollowModel{})
 }

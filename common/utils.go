@@ -16,6 +16,7 @@ import (
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
 
 // A helper function to generate random string
+// 一个辅助函数，用于生成随机字符串
 func RandString(n int) string {
 	b := make([]rune, n)
 	for i := range b {
@@ -24,11 +25,11 @@ func RandString(n int) string {
 	return string(b)
 }
 
-// Keep this two config private, it should not expose to open source
+// 保持这两个配置私有，它们不应该是对外暴露的资源
 const NBSecretPassword = "A String Very Very Very Strong!!@##$!@#$"
 const NBRandomPassword = "A String Very Very Very Niubilty!!@##$!@#4"
 
-// A Util function to generate jwt_token which can be used in the request header
+// 一个工具函数，用于生成 jwt_token，可以在请求头中使用
 func GenToken(id uint) string {
 	jwt_token := jwt.New(jwt.GetSigningMethod("HS256"))
 	// Set some claims
@@ -41,13 +42,13 @@ func GenToken(id uint) string {
 	return token
 }
 
-// My own Error type that will help return my customized Error info
+// 自定义的 Error 类型，用于 API 接口返回自定义的错误信息
 //  {"database": {"hello":"no such table", error: "not_exists"}}
 type CommonError struct {
 	Errors map[string]interface{} `json:"errors"`
 }
 
-// To handle the error returned by c.Bind in gin framework
+// 用于处理 gin 框架返回的 c.Bind 绑定错误（error）
 // https://github.com/go-playground/validator/blob/v9/_examples/translations/main.go
 func NewValidatorError(err error) CommonError {
 	res := CommonError{}
@@ -66,7 +67,7 @@ func NewValidatorError(err error) CommonError {
 	return res
 }
 
-// Warp the error info in a object
+// 封装错误信息到自定义的错误类型（CommonError）
 func NewError(key string, err error) CommonError {
 	res := CommonError{}
 	res.Errors = make(map[string]interface{})
