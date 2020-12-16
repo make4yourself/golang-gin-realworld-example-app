@@ -7,11 +7,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Models should only be concerned with database schema, more strict checking should be put in validator.
+// 模型应该只关注数据库数据表相关的计划， 更多更严格的检查应该放在验证器（validator）中
 //
-// More detail you can find here: http://jinzhu.me/gorm/models.html#model-definition
+// 更多模型定义相关的东西请查阅文档: https://gorm.io/zh_CN/docs/models.html
 //
-// HINT: If you want to split null and "", you should use *string instead of string.
+// 提示： 如果你想分隔 null 和 ""，应该使用 *string 而不是 string
 type UserModel struct {
 	ID           uint    `gorm:"primary_key"`
 	Username     string  `gorm:"column:username"`
@@ -21,16 +21,17 @@ type UserModel struct {
 	PasswordHash string  `gorm:"column:password;not null"`
 }
 
-// A hack way to save ManyToMany relationship,
+// 这是一种保存 ManyToMany 关系的妙招
+//
 // gorm will build the alias as FollowingBy <-> FollowingByID <-> "following_by_id".
 //
-// DB schema looks like: id, created_at, updated_at, deleted_at, following_id, followed_by_id.
+// gorm 会分别创建两个列名 following_id -> "FollowingID"， following_by_id -> "Following_by_id"
 //
-// Retrieve them by:
+// 数据表框架最后是这样的： id, created_at, updated_at, deleted_at, following_id, followed_by_id.
+//
+// 通过这样的方式查询他们:
 // 	db.Where(FollowModel{ FollowingID:  v.ID, FollowedByID: u.ID, }).First(&follow)
 // 	db.Where(FollowModel{ FollowedByID: u.ID, }).Find(&follows)
-//
-// More details about gorm.Model: http://jinzhu.me/gorm/models.html#conventions
 type FollowModel struct {
 	gorm.Model
 	Following    UserModel
@@ -49,9 +50,9 @@ func AutoMigrate() {
 	db.AutoMigrate(&FollowModel{})
 }
 
-// What's bcrypt? https://en.wikipedia.org/wiki/Bcrypt
-// Golang bcrypt doc: https://godoc.org/golang.org/x/crypto/bcrypt
-// You can change the value in bcrypt.DefaultCost to adjust the security index.
+// 什么是 bcrypt? https://en.wikipedia.org/wiki/Bcrypt
+// Golang bcrypt 文档: https://godoc.org/golang.org/x/crypto/bcrypt
+// 你可以在 bcrypt.DefaultCost 中改变改变值去安全索引
 // 	err := userModel.setPassword("password0")
 func (u *UserModel) setPassword(password string) error {
 	if len(password) == 0 {
@@ -64,7 +65,7 @@ func (u *UserModel) setPassword(password string) error {
 	return nil
 }
 
-// Database will only save the hashed string, you should check it by util function.
+// 数据库只会存储已经被 hash 算法计算过后的哈希值，你需要检查传过来的字符串通过相同函数计算之后的值
 // 	if err := serModel.checkPassword("password0"); err != nil { password error }
 func (u *UserModel) checkPassword(password string) error {
 	bytePassword := []byte(password)
